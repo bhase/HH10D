@@ -8,6 +8,7 @@
  **********************************************************/
 
 typedef enum {
+	HH10D_Ok = 0,
 	HH10D_Uninitialized,
 } HH10D_Result;
 

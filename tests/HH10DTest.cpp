@@ -17,8 +17,15 @@ TEST_GROUP(HH10D)
 	}
 };
 
+
 TEST(HH10D, Uninitialized)
 {
 	LONGS_EQUAL(HH10D_Uninitialized, HH10D_Measure());
+}
+
+TEST(HH10D, Initialized)
+{
+	HH10D_Create();
+	LONGS_EQUAL(HH10D_Ok, HH10D_Measure());
 }
 
