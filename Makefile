@@ -29,8 +29,7 @@ MOCKS_SRC_DIRS = \
 
 INCLUDE_DIRS =\
   .\
-  include \
-  include/* \
+  $(shell find include -type d)\
   $(CPPUTEST_HOME)/include/ \
   $(CPPUTEST_HOME)/include/Platforms/Gcc\
   mocks
