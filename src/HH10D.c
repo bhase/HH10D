@@ -22,3 +22,8 @@ HH10D_Result HH10D_Measure(void)
 		return HH10D_Uninitialized;
 	return HH10D_Ok;
 }
+
+Humidity HH10D_GetHumidity(void)
+{
+	return 224;
+}
