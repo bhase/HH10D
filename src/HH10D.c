@@ -1,4 +1,5 @@
 #include "HH10D.h"
+#include "I2C.h"
 
 static enum {
 	Uninitialized,
@@ -7,6 +8,13 @@ static enum {
 
 void HH10D_Create(void)
 {
+	uint8_t buf[4];
+
+	buf[0] = 0x0A;
+	I2C_WriteTo(0xA2, 1, buf);
+	I2C_ReadFrom(0xA3, 4, buf);
+	I2C_Run();
+
 	module_state = Ready;
 }
 
