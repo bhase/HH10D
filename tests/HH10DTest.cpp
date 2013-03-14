@@ -39,21 +39,15 @@ TEST(HH10D, Datasheet_example)
 
 TEST(HH10D, InitReadsParameter)
 {
-	uint8_t buf[4];
+	const I2C_Address device_address = 0xA2;
+	const uint8_t default_parameter[4] = {0x01, 0x63, 0x1D, 0x19};
+	uint8_t buf[1] = { 0x0A };
 
 	HH10D_Destroy();
 
 	MockI2C_Create(3);
-
-	buf[0] = 0x0A;
-	MockI2C_Expect_I2C_WriteTo_and_check_buffer(0xA2, 1, buf);
-
-	buf[0] = 0x01;
-	buf[1] = 0x63;
-	buf[2] = 0x1D;
-	buf[3] = 0x19;
-	MockI2C_Expect_I2C_ReadFrom_and_fill_buffer(0xA3, 4, buf);
-
+	MockI2C_Expect_I2C_WriteTo_and_check_buffer(device_address, 1, buf);
+	MockI2C_Expect_I2C_ReadFrom_and_fill_buffer(device_address, 4, default_parameter);
 	MockI2C_Expect_I2C_Run_and_return(I2C_Ok);
 
 	HH10D_Create();
