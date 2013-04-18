@@ -1,7 +1,16 @@
 extern "C"
 {
 #include "HH10D.h"
+#include "Timer.h"
 #include "MockI2C.h"
+
+static uint8_t get_frequency_called = 0;
+
+Frequency Timer_GetFrequency(void)
+{
+	get_frequency_called = 1;
+	return 0;
+}
 }
 
 #include "CppUTest/TestHarness.h"
@@ -10,6 +19,7 @@ TEST_GROUP(HH10D)
 {
 	void setup()
 	{
+		get_frequency_called = 0;
 		HH10D_Create();
 	}
 
@@ -54,4 +64,10 @@ TEST(HH10D, InitReadsParameter)
 
 	MockI2C_CheckExpectations();
 	MockI2C_Destroy();
+}
+
+TEST(HH10D, Measure_reads_frequency)
+{
+	HH10D_Measure();
+	LONGS_EQUAL(1, get_frequency_called);
 }

@@ -1,5 +1,6 @@
 #include "HH10D.h"
 #include "I2C.h"
+#include "Timer.h"
 
 static enum {
 	Uninitialized,
@@ -28,6 +29,7 @@ HH10D_Result HH10D_Measure(void)
 {
 	if (module_state == Uninitialized)
 		return HH10D_Uninitialized;
+	Timer_GetFrequency();
 	return HH10D_Ok;
 }
 
