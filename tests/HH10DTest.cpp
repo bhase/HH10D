@@ -5,11 +5,12 @@ extern "C"
 #include "MockI2C.h"
 
 static uint8_t get_frequency_called = 0;
+static uint16_t frequency = 7190;
 
 Frequency Timer_GetFrequency(void)
 {
 	get_frequency_called = 1;
-	return 0;
+	return frequency;
 }
 }
 
@@ -20,6 +21,7 @@ TEST_GROUP(HH10D)
 	void setup()
 	{
 		get_frequency_called = 0;
+		frequency = 7190;
 		HH10D_Create();
 	}
 
@@ -70,4 +72,11 @@ TEST(HH10D, Measure_reads_frequency)
 {
 	HH10D_Measure();
 	LONGS_EQUAL(1, get_frequency_called);
+}
+
+TEST(HH10D, Measure_evaluates_frequency)
+{
+	frequency = 6400;
+	HH10D_Measure();
+	LONGS_EQUAL(909, HH10D_GetHumidity());
 }

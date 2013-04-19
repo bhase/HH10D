@@ -7,6 +7,8 @@ static enum {
 	Ready,
 } module_state;
 
+static Humidity humidity = 0;
+
 void HH10D_Create(void)
 {
 	uint8_t buf[4];
@@ -27,13 +29,16 @@ void HH10D_Destroy(void)
 
 HH10D_Result HH10D_Measure(void)
 {
+	uint16_t freq = 0;
+
 	if (module_state == Uninitialized)
 		return HH10D_Uninitialized;
-	Timer_GetFrequency();
+	freq = Timer_GetFrequency();
+	humidity = (Humidity)(((uint32_t)7449 - freq) * (uint32_t)3550 / 4096);
 	return HH10D_Ok;
 }
 
 Humidity HH10D_GetHumidity(void)
 {
-	return 224;
+	return humidity;
 }
