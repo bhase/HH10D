@@ -9,6 +9,7 @@ static enum {
 
 static Humidity humidity = 0;
 static uint16_t offset = 0;
+static uint16_t sens = 0;
 
 void HH10D_Create(void)
 {
@@ -20,6 +21,7 @@ void HH10D_Create(void)
 	I2C_Run();
 
 	offset = (uint16_t)((buf[2] << 8) + buf[3]);
+	sens = (uint16_t)(((buf[0] << 8) + buf[1]) * 10);
 
 	module_state = Ready;
 }
@@ -38,7 +40,7 @@ HH10D_Result HH10D_Measure(void)
 		return HH10D_Uninitialized;
 
 	freq = Timer_GetFrequency();
-	humidity = (Humidity)((uint32_t)(offset - freq) * (uint32_t)3550 / 4096);
+	humidity = (Humidity)(((uint32_t)(offset - freq) * sens) / 4096);
 	return HH10D_Ok;
 }
 

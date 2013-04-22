@@ -41,7 +41,7 @@ TEST_GROUP(HH10D)
 	void setupSensorParameter(uint16_t offset, uint16_t sens)
 	{
 		const I2C_Address device_address = 0xA2;
-		uint8_t default_parameter[4] = {0x01, 0x63,
+		uint8_t default_parameter[4] = {(uint8_t)((sens >> 8) & 0xFF), (uint8_t)(sens & 0xFF),
 			(uint8_t)((offset >> 8) & 0xFF), (uint8_t)(offset & 0xFF)};
 		uint8_t buf[1] = { 0x0A };
 
@@ -104,5 +104,18 @@ TEST(HH10D, Measure_evaluates_offset)
 	HH10D_Measure();
 
 	LONGS_EQUAL(390, HH10D_GetHumidity());
+	MockI2C_Destroy();
+}
+
+TEST(HH10D, Measure_evaluates_sens)
+{
+	teardown();
+
+	setupSensorParameter(DEFAULT_OFFSET, 386);
+
+	HH10D_Create();
+	HH10D_Measure();
+
+	LONGS_EQUAL(244, HH10D_GetHumidity());
 	MockI2C_Destroy();
 }
